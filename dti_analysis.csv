@@ -1,0 +1,5 @@
+dti_bucket,borrowers,default_rate,avg_income
+"1. Low DTI (Below 10%)",190804,6.55,98522
+"2. Medium DTI (10-20%)",415240,8.08,83685
+"3. High DTI (20-30%)",311878,10.54,71248
+"4. Very High DTI (Above 30%)",130653,11.77,59519
