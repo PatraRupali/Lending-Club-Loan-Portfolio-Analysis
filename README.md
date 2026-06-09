@@ -31,7 +31,8 @@ Raw Data → Data Quality Checks → Data Cleaning → SQL Analysis → Power BI
 Lending-Club-Loan-Portfolio-Analysis/
 │
 ├── Lending_Club_Complete_Project_Final.sql   ← Complete pipeline (DQ + Cleaning + Analysis)
-├── Loan_Portfolio_Project_Showcase.pdf       ← Query outputs with business insights
+├── Dashboard.pbix                            ← Power BI dashboard file
+├── dashboard_screenshot.png                  ← Dashboard preview
 └── README.md                                 ← This file
 ```
 
@@ -130,7 +131,7 @@ All analysis runs on `loans_clean` — raw `loans` table preserved untouched.
 ### D. Advanced Analytics
 - **Top 5 states** (CA, TX, NY, FL, IL) account for **41.8%** of total portfolio value
 - **SUBPRIME** borrowers default at **16.42%** — **3.7x** higher than PRIME (4.46%)
-- **Arkansas** = highest default state at **10.98%** · Top 5 riskiest = all Southern/Midwestern
+- **Arkansas** = highest default state at **10.98%**
 - Grade cliff identified: **E→F jump = +11.09%** default — largest single-step risk increase
 - **Q2 Medium Loans ($8K–$15K)** = largest segment (341,535 loans)
 
@@ -146,31 +147,35 @@ All analysis runs on `loans_clean` — raw `loans` table preserved untouched.
 | `RANK() OVER (ORDER BY ...)` | D1 | Risk ranking with tie handling |
 | `DENSE_RANK() OVER (ORDER BY ...)` | D4 | Geographic risk leaderboard — no rank gaps |
 | `LAG() OVER (ORDER BY ...)` | D5 | Period-over-period delta comparison |
-| Two-level CTE | D3 | Score borrowers on 4 factors |
 | Three-level CTE | D3 | Score → Segment → Summarise pipeline |
 | `CREATE VIEW` | Section 0B | Data cleaning — raw data preserved |
 | `UNION ALL` | E1 | Formatted management report |
 | `HAVING COUNT(*) >= 50` | D4 | Statistical significance filter |
-| `TRIM()` in GROUP BY | A2 | Dirty data handling |
-| `COALESCE` + `CASE WHEN` | Section 0B | NULL and 'n/a' handling |
+| `TRIM()` + `COALESCE` + `CASE WHEN` | Section 0B | Dirty data handling |
 
 ---
 
-## 📈 Power BI Dashboard *(In Progress)*
+## 📈 Power BI Dashboard ✅ Complete
 
-Connecting the SQL analysis to an interactive Power BI report with the following visuals:
+![Dashboard](dashboard_screenshot.png)
 
-| Visual | Data Source | Insight |
+**Single page dashboard with 9 visuals — built on aggregated SQL query outputs:**
+
+| Visual | Type | Key Insight |
 |---|---|---|
-| KPI Cards | A1 — portfolio_kpis | Total loans, portfolio value, risk rate |
-| Bar Chart | B1 — grade_summary | Default rate by credit grade A→G |
-| Filled Map | D4 — state_risk | Geographic default concentration |
-| Donut Chart | D3 — segment_summary | PRIME / NEAR PRIME / SUBPRIME split |
-| Line Chart | D5 — grade_rates | Rate jump and default cliff by grade |
-| Stacked Bar | B3 — dti_buckets | DTI bucket vs default rate |
-| Matrix Table | E1 — portfolio_stats | Executive summary report |
-
-> 🔗 Dashboard link will be added here upon completion
+| Total Loans | KPI Card | 1.05M loans in portfolio |
+| Portfolio Value | KPI Card | $16.13B total funded amount |
+| Default Rate | KPI Card | 8.99% portfolio risk |
+| Charged Off Loans | KPI Card | 94,286 total defaults |
+| Avg Interest Rate | KPI Card | 12.80% lending rate |
+| Avg DTI | KPI Card | 19.27% borrower DTI |
+| Credit Risk Across Grades | Combo Chart (Bar + Line) | Grade G defaults 17x more than Grade A |
+| Loan Status Distribution | Donut Chart | Current 57.53% · Fully Paid 31.62% · Charged Off 8.99% |
+| Default Rate by DTI Bucket | Combo Chart (Bar + Line) | Very High DTI = 11.77% default rate |
+| Top 5 States by Default Rate | Bar Chart | Arkansas ranks #1 at 11.0% |
+| Top 5 States by Loan Volume | Bar Chart | California leads at 141K loans |
+| Loan Purpose by Default Rate | Treemap | Small Business = highest risk at 14.00% |
+| Key Insights Panel | Text Box | 5 key business findings |
 
 ---
 
@@ -181,17 +186,21 @@ Connecting the SQL analysis to an interactive Power BI report with the following
 CREATE DATABASE IF NOT EXISTS lending_analysis;
 USE lending_analysis;
 
--- Step 2: Import dataset
--- MySQL Workbench → Table Data Import Wizard → loan.csv
--- OR use LOAD DATA INFILE for large files
+-- Step 2: Import dataset using LOAD DATA INFILE
+SET sql_mode = '';
+LOAD DATA INFILE 'path/to/loan.csv'
+INTO TABLE loans
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
 
 -- Step 3: Run complete pipeline
 -- Open Lending_Club_Complete_Project_Final.sql
 -- Press Ctrl + Shift + Enter
--- Sections run top to bottom automatically
 ```
 
-**MySQL version required:** 8.0+ (window functions + CTEs)
+**MySQL version required:** 8.0+
 
 ---
 
@@ -202,7 +211,7 @@ USE lending_analysis;
 | **Credit Policy** | Grade G and DTI>30% thresholds for approval decisions |
 | **Risk Management** | NPA identification · geographic concentration limits |
 | **Pricing Strategy** | Grade-over-grade rate cliff analysis (D5) |
-| **Customer Segmentation** | PRIME / NEAR PRIME / SUBPRIME classification (D3) |
+| **Customer Segmentation** | Income band and home ownership benchmarks |
 | **MIS Reporting** | Executive one-page portfolio health report (E1) |
 | **Underwriting** | Income band and home ownership benchmarks |
 
@@ -213,9 +222,9 @@ USE lending_analysis;
 **Rupali Patra**  
 Data Analyst · Banking & Financial Services Domain  
 📧 rupalipatra1994@gmail.com  
-🔗 [GitHub](https://github.com/RupaliPatra/loan-portfolio-analysis)  
+🔗 [GitHub](https://github.com/PatraRupali/Lending-Club-Loan-Portfolio-Analysis)  
 🔗 [LinkedIn](https://linkedin.com/in/rupalipatra)
 
 ---
 
-*This project demonstrates production-grade SQL analytics skills in the banking and financial services domain — from raw data validation through to executive reporting and interactive dashboards.*
+*This project demonstrates production-grade SQL analytics and Power BI dashboard skills in the banking and financial services domain — from raw data validation through to executive reporting and interactive dashboards.*
