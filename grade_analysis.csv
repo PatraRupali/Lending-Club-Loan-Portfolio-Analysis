@@ -1,8 +1,0 @@
-grade,risk_category,total_loans,default_rate,avg_rate
-A,"Low Risk",226847,2.22,7.00
-B,"Low Risk",312159,6.29,10.52
-C,"Medium Risk",293596,10.54,14.12
-D,"Medium Risk",144272,14.38,18.68
-E,"High Risk",53221,21.82,22.88
-F,"High Risk",14773,32.91,26.25
-G,"High Risk",3707,38.68,29.02
